@@ -1,0 +1,52 @@
+
+{% extends '../base.html' %}
+
+
+{% block title %} Home {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="p-4 m-4">
+        <div class="col-lg-5 mt-4 border mb-4 mx-auto rounded pt-4 login" >
+           
+            <form action="{% url 'returnorderPage' pk=order.id %}" method="POST" enctype="multipart/form-data">
+                
+                {% csrf_token %}
+
+                <h5 class="heading text-center">
+                    Return Order Form
+                  </h5>
+                <!-- email -->
+                <div class="form-group">
+                    <label for="">Name</label>
+             <input required type="text" name="name" id="" class="form-control" placeholder=""
+               aria-describedby="helpId">
+                </div>
+                <div class="form-group">
+                    <label for="">Contact</label>
+                    <input required type="text" name="contact" id="" class="form-control" placeholder=""
+                      aria-describedby="helpId">
+                  </div>
+                  <div class="form-group">
+                    <label for="">Damage description</label>
+                    <input required type="text" name="damage_desc" id="" class="form-control" placeholder=""
+                      aria-describedby="helpId">
+                  </div>
+                  <div class="form-group">
+                    <label for="">Photo</label>
+                    <input required type="file" name="damage_photo" id="" class="form-control" accept="image/*">
+                  </div>
+
+                <div class="form-group text-center">
+                    <input class="btn btn-sm btn-info col-lg-4" type="submit" value="Return">
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

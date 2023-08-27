@@ -1,0 +1,102 @@
+
+{% extends '../base.html' %}
+
+
+{% block title %} Home {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block body %}
+
+{% include '../navbar.html' %}
+
+<style>
+   .card-link {
+      text-decoration: none;
+      /* color: inherit; */
+   }
+   
+   .card-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: -1rem; /* Adjust as needed to match your grid's gutter */
+   }
+
+   .col-md-4,
+   .col-sm-6 {
+      padding: 1rem; /* Adjust as needed to match your grid's gutter */
+   }
+
+   .custom-card {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      /* transition: transform 0.2s; */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%; /* Ensures equal card heights */
+   }
+
+   .custom-card:hover {
+      background-color: #F7C17B;
+      /* color: white; */
+      transform: scale(1.05);
+   }
+
+   .card-body {
+      padding: 1rem;
+   }
+
+   .centered-title {
+      text-align: center;
+      font-size: 1.25rem;
+      margin: 0;
+   }
+
+   .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+
+   .centered-image {
+      text-align: center;
+      margin: 0 auto;
+      display: block;
+   }
+
+   .card-text {
+      font-size: 1rem;
+   }
+</style>
+
+<div class="container">
+   <h1 class="cycle_taital">Categories</h1>
+   <p class="cycle_text mb-5">World's Best Quality Bicycles are available at an effective price</p>
+   <div class="row text-center">
+      {% for category in categories %}
+      <div class="col-md-4 col-sm-6">
+         <a href="{% url 'productPage' c_id=category.id %}" class="card-link">
+            <div class="card custom-card">
+               <div class="card-body">
+                  <h5 class="card-title centered-title">{{category.name}}</h5>
+                  <div class="image-container">
+                     <img src="/static/images/img-1.png" class="centered-image" style="width: 10rem; height: 8rem;" alt="Category Image">
+                  </div>
+                  <p class="card-text">Check the new products ....</p>
+               </div>
+            </div>
+         </a>
+      </div>
+      {% endfor %}
+   </div>
+   
+   <div class="my-5"></div>
+   
+</div>
+
+          
+      {% include '../footer.html' %}
+{% endblock %}

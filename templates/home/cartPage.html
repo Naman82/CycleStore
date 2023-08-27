@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% block title %} {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block body %} 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a href="index.html" class="logo"><img src="/static/images/logo.png"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="nav-normal" id="navbarSupportedContent">
+       <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+             <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" href="#">About</a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+             <a class="nav-link" href="{% url 'orderPage' %}">Orders</a>
+          </li>
+          {% endif %}
+          
+          <li class="nav-item">
+             <a class="nav-link" href="#">Contact Us</a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'logoutPage' %}">Logout</a></li>
+          {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'loginPage' %}">Login</a></li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cartPage' %}">
+               <span class="nav-item"><img src="/static/images/shopping-cart.png" style="width:22px; height: 22px; "></span>
+               <span class=" nav-item badge bagde-warning">{{request.session.cart.keys|length}}</span>
+              </a>
+           </li>
+       </ul>
+    </div>
+ </nav>
+
+ <div class="warpper min-vh-100">
+
+     <div class="card text-center">
+         <div class="card-header">
+             Cart Products
+            </div>
+            {% if products == None %}
+            <div class="text-center my-5" style="min-height: 100%;">
+
+                <img src="/static/images/shopping-cart.png" style="width:22px; height: 22px; ">
+                <p>Cart is Empty</p>
+            </div>
+            {% endif %}
+            <div class="card-body container">
+               
+                    {% for product in products %}
+                    <div class="card mb-3" style="max-width:100%;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src=
+            "{{product.image.url}}" 
+                                    class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="padding: 0;">
+                                        {{product.name}}
+                                    </h5>
+                                    <p class="card-text" style="padding: 0; margin: 0;">
+                                        {{product.description|truncatechars:50}} 
+                                    </p>
+                                    <div class="d-flex justify-content-center align-items-center h-100 my-5">
+
+                                        <div class="d-flex flex-column" style="width: 12rem;">
+                                            <div class="row" >
+                                                
+                                                <form action="{% url 'cartPage' %}" class="col-3 p-0" method="POST">
+                                                    {% csrf_token %}
+                                                    <input hidden type="text" name='product' value='{{product.id}}'>
+                                                    <input hidden type="text" name='remove' value="True">
+                                                    <input type="submit" value="-" class="btn btn-block btn-dark border-left">
+                                                </form>
+                                                <div class="text-center col-6 p-0" style="border: 1px solid gray;">{{product|cart_quantity:request.session.cart}}</div>
+                                                <form action="{% url 'cartPage' %}" method="POST" class="col-3 p-0">
+                                                    {% csrf_token %}
+                                                    <input hidden type="text" name='product' value='{{product.id}}'>
+                                                    <input hidden type="text" name='remove' value="False">
+                                                    <input type="submit" class="float-right btn btn-info  form-control"
+                                                    value="+">
+                                                </form>
+                                            </div>
+                                                <p><span style="font-weight: bold;">Price : </span>₹ {{product|price_total:request.session.cart}}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            Last updated now
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+               
+            </div>
+            
+            {% if products != None %}
+            <table class="table">
+                <thead class="bg-dark">
+                  <tr>
+                    <th scope="col" style="color: white;">Total Items</th>
+                    <th scope="col" style="color: white;">Total Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border">
+                    {% if products != None %}
+                    <td>{{products|total_quantity:request.session.cart}}</td>
+                    <td>₹ {{products|total_cart_price:request.session.cart}}</td>
+                    {% endif %}
+                  </tr>
+                  
+                </tbody>
+              </table>
+              <div class="text-center my-5">
+                  <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary">Place Order</a>
+                </div>
+                {% endif %}
+            <div class="card-footer text-muted">
+                © <a href="https://naman-goyal.vercel.app" target="_blank">Naman Goyal</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+              Check Out Form
+          </h5>
+          <hr>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="m-2 p-3">
+            <form action="{% url 'orderPage' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="">Address</label>
+                  <input required type="text" name="address" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                  
+                </div>
+                <div class="form-group">
+                    <label for="">Phone</label>
+                    <input required type="text" name="phone" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                  </div>
+
+                  <input type="submit" class="btn float-right btn-outline-info col-lg-6" value="Check out">
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+ {% endblock %}

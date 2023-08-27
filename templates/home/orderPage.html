@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% block title %} {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block body %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a href="index.html" class="logo"><img src="/static/images/logo.png"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="nav-normal" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About</a>
+      </li>
+      {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'orderPage' %}">Orders</a>
+      </li>
+      {% endif %}
+
+      <li class="nav-item">
+        <a class="nav-link" href="#">Contact Us</a>
+      </li>
+      {% if user.is_authenticated %}
+      <li class="nav-item"><a class="nav-link" href="{% url 'logoutPage' %}">Logout</a></li>
+      {% else %}
+      <li class="nav-item"><a class="nav-link" href="{% url 'loginPage' %}">Login</a></li>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'cartPage' %}">
+          <span class="nav-item"><img src="/static/images/shopping-cart.png" style="width:22px; height: 22px; "></span>
+          <span class=" nav-item badge bagde-warning">{{request.session.cart.keys|length}}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="warpper min-vh-100">
+
+  <div class="card text-center">
+    <div class="card-header">
+      Order List
+    </div>
+
+    <div class="card-body  container">
+      <!-- <div class="container d-flex mt-4 p-4"> -->
+      {% for order in orders %}
+      {% if order.is_returned == False %}
+      <div class="card mb-5" style="max-width:100%;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{order.product.image.url}}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title" style="padding: 0;">
+                {{order.product.name}}
+              </h5>
+              <div class="text-center">
+                <p>Order Status</p>
+                <div class="text-center align-items-center d-flex flex-column justify-content-center">
+                  <div class="progress" style="width: 12rem;">
+                    {% if order.status %}
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"
+                      aria-valuemin="0" aria-valuemax="100"><span style="color: white;">Completed</span></div>
+                    {% else %}
+                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100"
+                      aria-valuemin="0" aria-valuemax="100"><span style="color: white;">Pending</span></div>
+                    {% endif %}
+                  </div>
+                </div>
+                <p><span style="font-weight: bold;">Qunatity</span> : {{order.quantity}}</p>
+                <p><span style="font-weight: bold;">Price per piece</span> : ₹ {{order.price}}</p>
+                <a href="{% url 'returnorderPage' pk=order.id %}" class="btn btn-danger">Return Product</a>
+                
+
+               
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      {% endif %}
+      {% endfor %}
+      <!-- </div> -->
+    </div>
+
+    <div class="card-footer text-muted">
+      © <a href="https://naman-goyal.vercel.app" target="_blank">Naman Goyal</a>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

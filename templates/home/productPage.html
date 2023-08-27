@@ -1,0 +1,60 @@
+
+{% extends '../base.html' %}
+
+
+{% block title %} Home {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block body %}
+
+{% include '../navbar.html' %}
+
+<style>
+    .btn-new{
+        background-color: #325662; 
+        color: white;
+        margin-right: 0.5rem;
+    }
+</style>
+<!-- cycle section start -->
+      <div class="cycle_section layout_padding">
+         <div class="container">
+            
+            <h1 class="cycle_taital">Our cycle</h1>
+            <p class="cycle_text">World's Best Quality Bicycles are available at an effective price</p>
+            <div class="cycle_section_2 layout_padding">
+               <div class="row">
+                {% for product in products %}
+                  <div class="col-md-6 my-5">
+                     <div class="box_main">
+                        <h6 class="number_text">{{product.id}}</h6>
+                        <div class="image_2"><img src="{{product.image.url}}"></div>
+                     </div>
+                  </div>
+                  <div class="col-md-6">
+                     <h1 class="cycles_text">{{product.name}}</h1>
+                     <p class="lorem_text">{{product.description}}</p>
+                     <div class="btn_main">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input href="#" class="btn btn-new" value="Buy Now"></input>
+                        </form>
+                        <form action="/" method="post">
+                            {% csrf_token %}
+                            <input hidden type="text" value="{{product.id}}" name="product">
+                            <input type="submit" class="btn btn-warning" value="Add to Cart"></input>
+                        </form>
+                        <h4 class="price_text">Price <span style=" color: #f7c17b">₹</span> <span style=" color: #325662">{{product.price}}</span></h4>
+                     </div>
+                  </div>
+                  {% endfor %}
+               </div>
+               <div class="my-5"></div>
+            </div>
+         </div>
+      </div>
+      <!-- cycle section end -->
+
+{% include '../footer.html' %}
+{% endblock %}
