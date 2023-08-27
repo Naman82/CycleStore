@@ -45,7 +45,7 @@ def cartPage(request):
         # print(products)
     return render(request,"home/cartPage.html",{"products":products})
 
-YOUR_DOMAIN = "http://127.0.0.1:8000"
+YOUR_DOMAIN = "https://cyclestore-d946.onrender.com/"
 YOUR_SUCCESS_URL = YOUR_DOMAIN+'/success'
 YOUR_CANCEL_URL = YOUR_DOMAIN+'/cancel'
 
