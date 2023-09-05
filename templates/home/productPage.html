@@ -36,10 +36,10 @@
                      <h1 class="cycles_text">{{product.name}}</h1>
                      <p class="lorem_text">{{product.description}}</p>
                      <div class="btn_main">
-                        <form action="" method="post">
+                        <!-- <form action="" method="post">
                             {% csrf_token %}
                             <input type="submit" class="btn btn-new" value="Buy Now"></input>
-                        </form>
+                        </form> -->
                         <form action="/" method="post">
                             {% csrf_token %}
                             <input hidden type="text" value="{{product.id}}" name="product">
